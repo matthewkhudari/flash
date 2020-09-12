@@ -24,7 +24,6 @@ def test_all():
 			if '#####' in  data[1]:
 				audio_bytes = b''
 			else:
-				print(data)
 				audio_bytes = filemanager.read_audio_file('testing/audio/' + data[2] + '.mp3')
 			data[1] = audio_bytes
 		for i in range(len(scraper_data)):

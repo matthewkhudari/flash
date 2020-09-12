@@ -33,7 +33,7 @@ class Scraper:
 		for element in elements:
 			if not element.text:
 				elements.remove(element)
-		assert len(elements) == 1
+		assert len(elements) == 1, 'expected 1 nonempty element but got {}'.format(len(elements))
 		return elements[0].text
 
 	def get_word_pinyin_and_translation(self, word):
