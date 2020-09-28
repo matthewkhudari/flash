@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Flash{% endblock %}
+
+{% block header %}
+	<div class="header">
+		<h2>Flash</h2>
+		<a class="button nav-button-right" href="{{ url_for('logout') }}">Log out</a>
+		<a class="button button-primary nav-button-left"
+		href="{{ url_for('create') }}">New Flashcard</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+	{% if in_progress %}
+		<section>
+			<h5 class="table-header">In progress cards</h5>
+			<table>
+				<thead>
+					<th>Phrase</th>
+				</thead>
+				<tbody>
+					{% for card in in_progress %}
+						<tr>
+							<td>{{ card.phrase }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</section>
+	{% endif %}
+	<section>
+		<h5 class="table-header">Cards</h5>
+		<form method="post">
+			<table class="u-full-width">
+				<thead>
+					<th>Phrase</th>
+					<th>Translation</th>
+					<th>Pinyin</th>
+					<th>Select</th>
+					<th>Audio</th>
+				</thead>
+				<tbody>
+					{% for card in cards %}
+						<tr>
+							<td>{{ card.phrase }}</td>
+							<td>{{ card.translation }}</td>
+							<td>{{ card.pinyin }}</td>
+							<td><input type="checkbox" name="download" value="{{ card.id }}"></td>
+							<td><input type="submit" value="Download" name="{{ card.id }}"></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<input class="button-primary" type="submit" value="Download selected" name="submit">
+		</form>
+	</section>
+{% endblock %}

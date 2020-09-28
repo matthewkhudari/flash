@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Flash{% endblock %}
+
+{% block header %}
+	<div class="header-index">
+		<h1>Scrape away your worries, in a Flash.</h1>
+		{% if current_user.is_authenticated %}
+			<a class="button button-primary" href="{{ url_for('home') }}">Start</a>
+		{% else %}
+			<a class="button" href="{{ url_for('login') }}">Log in</a>
+			<a class="button button-primary" href="{{ url_for('register') }}">Register</a>
+		{% endif %}
+	</div>
+{% endblock %}
