@@ -6,3 +6,5 @@ chinesepod_credentials.json
 __pycache__/
 env/
 .DS_Store
+*.db
+*.rdb

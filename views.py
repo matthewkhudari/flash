@@ -14,7 +14,7 @@ from scraper import Scraper
 
 def make_card(card_id, is_sentence):
 	card = Card.query.filter_by(id=card_id).first()
-	s = Scraper(headless=False)
+	s = Scraper()
 	if is_sentence:
 		scraped_data = s.scrape_sentence(card.phrase)
 	else:
@@ -68,7 +68,7 @@ def home():
 								'attachment; filename='+filename}
 				)
 		flask_flash('No audio file found: no valid card id given')
-	cards = Card.query.filter_by(user_id=current_user.id, pending=False).all()
+	cards = Card.query.filter_by(user_id=current_user.id, pending=False).all()[::-1]
 	in_progress = Card.query.filter_by(user_id=current_user.id, pending=True).all()
 	return render_template('home.html', cards=cards, in_progress=in_progress)
 
