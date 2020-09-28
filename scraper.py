@@ -18,10 +18,10 @@ class Scraper:
 		audio = self.get_word_audio(word)
 		return (pinyin_and_translation[0], audio, word, pinyin_and_translation[1])
 		
-	def scrape_sentence(self, sentence, word):
+	def scrape_sentence(self, sentence):
 		pinyin = self.get_google_pinyin(sentence)
 		translation_and_audio = self.get_sentence_translation_and_audio( \
-					sentence, word)
+					sentence)
 		return (pinyin, translation_and_audio[1], sentence, translation_and_audio[0])
 
 
@@ -77,8 +77,8 @@ class Scraper:
 		audio_bytes = session.get(element.get_attribute('href')).content
 		return audio_bytes
 
-	def get_sentence_translation_and_audio(self, sentence, word):
-		self.goto_chinesepod_page(word)
+	def get_sentence_translation_and_audio(self, sentence):
+		self.goto_chinesepod_page(sentence)
 		parent = self.find_sentence_element(sentence)
 		element = parent.find_element_by_xpath('./td[1]')
 		translation = element.text[element.text.rindex('\n') + 1:]
@@ -106,18 +106,9 @@ class Scraper:
 		
 	def find_sentence_element(self, sentence):
 		# Must be logged in to chinesepod and in correct page
-		all_elements = self.driver.find_elements_by_xpath( \
+		return self.driver.find_element_by_xpath( \
 					'//table[@class="table table-striped table-grossary"]/tbody/tr')
-		for element in all_elements:
-			character_elements = element.find_elements_by_xpath('./td[1]/span')
-			for e in character_elements:
-				if e.text not in sentence:
-					break
-			else:
-				matching_element = element
-				break
-		return matching_element
-
+		
 def get_chinesepod_credentials():
 	with open('chinesepod_credentials.json') as f:
 		return json.load(f)

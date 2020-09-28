@@ -22,9 +22,8 @@ def test_get_word_audio():
 
 def test_get_sentence_translation_and_audio():
 	sentence = '他会说很多种语言，比如汉语，日语，德语。'
-	word = '比如'
 	s = Scraper()
-	retval = s.get_sentence_translation_and_audio(sentence, word)
+	retval = s.get_sentence_translation_and_audio(sentence)
 	assert retval[0] == \
 		'He can speak many languages, such as Chinese, Japanese and German.'
 	assert retval[1] # (is nonempty)

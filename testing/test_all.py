@@ -15,7 +15,7 @@ def test_all():
 			scraper_data.append(scraper.scrape_word(word))
 		for sentence_tuple in input_data[1]:
 			scraper_data.append(scraper.scrape_sentence( \
-						sentence_tuple[0], sentence_tuple[1]))
+						sentence_tuple[0]))
 		output_data = []
 		output_filename = 'output' + input_filename[5:]
 		output_data = filemanager.read_output_file( \
@@ -28,5 +28,9 @@ def test_all():
 			data[1] = audio_bytes
 		for i in range(len(scraper_data)):
 			for j in range(4):
+				if scraper_data[i][j] != output_data[i][j]:
+					print()
+					print(scraper_data[i][2])
+					print()
 				assert scraper_data[i][j] == output_data[i][j]
 

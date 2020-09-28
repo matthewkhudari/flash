@@ -13,7 +13,7 @@ def main():
 		scraper_data.append(scraper.scrape_word(word))
 	for sentence_tuple in input_data[1]:
 		scraper_data.append(scraper.scrape_sentence( \
-					sentence_tuple[0], sentence_tuple[1]))
+					sentence_tuple[0]))
 	for data in scraper_data:
 		if data[1]:
 			audio_filename = 'testing/audio/' + data[2][:30] + '.mp3'
