@@ -1,2 +1,3 @@
 web: python app.py
-worker: rq worker
+worker: python worker.py
+db: python models.py
