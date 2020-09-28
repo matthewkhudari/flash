@@ -12,9 +12,9 @@ from app import app
 from models import User, Card
 from scraper import Scraper
 
-def make_card(card_id, is_sentence):
+def make_card(card_id, is_sentence, credentials):
 	card = Card.query.filter_by(id=card_id).first()
-	s = Scraper()
+	s = Scraper(credentials=credentials)
 	if is_sentence:
 		scraped_data = s.scrape_sentence(card.phrase)
 	else:
@@ -87,7 +87,8 @@ def create():
 		if error is None:
 			q = Queue(connection=Redis())
 			card = Card.new(current_user, phrase)
-			q.enqueue(make_card, card.id, is_sentence)
+			credentials = (current_user.chinesepod_username, current_user.chinesepod_password)
+			q.enqueue(make_card, card.id, is_sentence, credentials)
 			return redirect(url_for('home'))
 
 		flask_flash(error)
@@ -131,6 +132,10 @@ def credentials():
 			error = 'Chinesepod username is required'
 		elif not chinesepod_password:
 			error = 'Chinesepod password is required'
+
+		s = Scraper(credentials=(chinesepod_username, chinesepod_password))
+		if not s.verify_chinesepod_credentials():
+			error = 'Invalid credentials'
 
 		if error is None:
 			current_user.update_chinesepod_credentials(chinesepod_username, chinesepod_password)

@@ -6,18 +6,30 @@ from selenium.webdriver.chrome.options import Options
 
 
 class Scraper:
-	def __init__(self, headless=True):
+	def __init__(self, headless=True, credentials=None):
 		options = Options()
 		if headless:
 			options.add_argument("--headless")
 		self.driver = webdriver.Chrome(options=options)
 		self._logged_in = False
-	
+		if credentials:
+			self.chinesepod_username = credentials[0]
+			self.chinesepod_password = credentials[1]
+		else:
+			credentials = get_chinesepod_credentials()
+			self.chinesepod_username = credentials['username']
+			self.chinesepod_password = credentials['password']
+
+	def verify_chinesepod_credentials(self):
+		self.goto_chinesepod_page('拿手菜')
+		return len(self.driver.find_elements_by_link_text('Log In')) == 0
+
+
 	def scrape_word(self, word):
 		pinyin_and_translation = self.get_word_pinyin_and_translation(word)
 		audio = self.get_word_audio(word)
 		return (pinyin_and_translation[0], audio, word, pinyin_and_translation[1])
-		
+
 	def scrape_sentence(self, sentence):
 		pinyin = self.get_google_pinyin(sentence)
 		translation_and_audio = self.get_sentence_translation_and_audio( \
@@ -40,7 +52,7 @@ class Scraper:
 		url = 'https://chinese.yabla.com/chinese-english-pinyin-dictionary' \
 			+ '.php?define={}'.format(urllib.parse.quote(word))
 		self.driver.get(url)
-		
+
 		# Find elements that match word
 		all_elements = self.driver.find_elements_by_xpath('//ul[@id="search_results"]/li')
 		matching_elements = []
@@ -51,7 +63,7 @@ class Scraper:
 				character_string += descendant.text
 			if character_string == word:
 				matching_elements.append(element)
-		
+
 		# Construct translation and pinyin
 		pinyin = ''
 		translation = ''
@@ -89,26 +101,25 @@ class Scraper:
 			session.cookies.set(cookie['name'], cookie['value'])
 		audio_bytes = session.get(element.get_attribute('href')).content
 		return (translation, audio_bytes)
-	
+
 	def goto_chinesepod_page(self, word):
 		if not self._logged_in:
 			self.driver.get('https://chinesepod.com/accounts/signin')
 			email_input = self.driver.find_element_by_id('email')
 			password_input = self.driver.find_element_by_id('password')
-			credentials = get_chinesepod_credentials()
-			email_input.send_keys(credentials['username'])
-			password_input.send_keys(credentials['password'])
+			email_input.send_keys(self.chinesepod_username)
+			password_input.send_keys(self.chinesepod_password)
 			self.driver.find_element_by_xpath('//button[text()="Log In"]').click()
 			self._logged_in = True
 		url = 'https://chinesepod.com/tools/glossary/entry/{}'.format( \
 					urllib.parse.quote(word))
 		self.driver.get(url)
-		
+
 	def find_sentence_element(self, sentence):
 		# Must be logged in to chinesepod and in correct page
 		return self.driver.find_element_by_xpath( \
 					'//table[@class="table table-striped table-grossary"]/tbody/tr')
-		
+
 def get_chinesepod_credentials():
 	with open('chinesepod_credentials.json') as f:
 		return json.load(f)
