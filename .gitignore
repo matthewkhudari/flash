@@ -5,6 +5,7 @@ chinesepod_credentials.json
 .pytest_cache/
 __pycache__/
 env/
+.env
 .DS_Store
 *.db
 *.rdb

@@ -10,7 +10,7 @@ services:
 
   worker:
     build: .
-    command: rq worker
+    command: python worker.py
     depends_on:
       - redis
 

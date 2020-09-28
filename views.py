@@ -5,12 +5,12 @@ from flask import flash as flask_flash
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from redis import Redis
 from rq import Queue
 
 from app import app
 from models import User, Card
 from scraper import Scraper
+from worker import conn
 
 def make_card(card_id, is_sentence, credentials):
 	card = Card.query.filter_by(id=card_id).first()
@@ -85,7 +85,7 @@ def create():
 			error = 'Phrase is required'
 
 		if error is None:
-			q = Queue(connection=Redis())
+			q = Queue(connection=conn)
 			card = Card.new(current_user, phrase)
 			credentials = (current_user.chinesepod_username, current_user.chinesepod_password)
 			q.enqueue(make_card, card.id, is_sentence, credentials)
