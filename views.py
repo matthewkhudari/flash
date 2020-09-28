@@ -87,7 +87,7 @@ def create():
 		if error is None:
 			q = Queue(connection=conn)
 			card = Card.new(current_user, phrase)
-			credentials = (current_user.chinesepod_username, current_user.chinesepod_password)
+			credentials = [current_user.chinesepod_username, current_user.chinesepod_password]
 			q.enqueue(make_card, card.id, is_sentence, credentials)
 			return redirect(url_for('home'))
 

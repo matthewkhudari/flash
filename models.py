@@ -7,8 +7,8 @@ from app import db
 
 class User(db.Model, UserMixin):
 	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(80), unique=True, nullable=False)
-	password = db.Column(db.String(80), nullable=False)
+	username = db.Column(db.Text, unique=True, nullable=False)
+	password = db.Column(db.Text, nullable=False)
 	chinesepod_username = db.Column(db.Text, default="")
 	chinesepod_password = db.Column(db.Text, default="")
 
@@ -58,7 +58,3 @@ class Card(db.Model):
 		db.session.commit()
 
 
-if __name__ == '__main__':
-	print('Creating database tables...')
-	db.create_all()
-	print('Done')
