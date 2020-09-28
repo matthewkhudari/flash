@@ -19,6 +19,6 @@ if __name__ == '__main__':
 	from views import *
 	from login import *
 
-	app.run(debug=True)
+	app.run(debug=True, host='0.0.0.0')
 
 
