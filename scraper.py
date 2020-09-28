@@ -9,8 +9,17 @@ class Scraper:
 	def __init__(self, headless=True, credentials=None):
 		options = Options()
 		if headless:
-			options.add_argument("--headless")
-		self.driver = webdriver.Chrome(options=options)
+			options.add_argument('--headless')
+			options.add_argument('--disable-gpu')
+			options.add_argument('--no-sandbox')
+		chrome_path = os.getenv('GOOGLE_CHROME_PATH')
+		if chrome_path:
+			options.binary_location = chrome_path
+		chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+		if chromedriver_path:
+			self.driver = webdriver.Chrome(options=options, execution_path=chromedriver_path)
+		else:
+			self.driver=webdriver.Chrome(options=options)
 		self._logged_in = False
 		if credentials:
 			self.chinesepod_username = credentials[0]
