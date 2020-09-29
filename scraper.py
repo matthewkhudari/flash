@@ -19,7 +19,7 @@ class Scraper:
 			options.binary_location = chrome_path
 		chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
 		if chromedriver_path:
-			self.driver = webdriver.Chrome(options=options, execution_path=chromedriver_path)
+			self.driver = webdriver.Chrome(options=options, executable_path=chromedriver_path)
 		else:
 			self.driver=webdriver.Chrome(options=options)
 		self._logged_in = False
