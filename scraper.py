@@ -18,10 +18,17 @@ class Scraper:
 		if chrome_path:
 			options.binary_location = chrome_path
 		chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-		if chromedriver_path:
-			self.driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
-		else:
-			self.driver=webdriver.Chrome(options=options)
+		#if chromedriver_path:
+		#	self.driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+		#else:
+		#	self.driver=webdriver.Chrome(options=options)
+		for p in ('/.chromedriver/bin/chromedriver', '/flash/.chromedriver/bin/chromedriver', '/app/.chromedriver/bin/chromedriver'):
+			try:
+				self.driver=webdriver.Chrome(executable_path=p, options=options)
+				print()
+				print(p)
+				print()
+				break
 		self._logged_in = False
 		if credentials:
 			self.chinesepod_username = credentials[0]
