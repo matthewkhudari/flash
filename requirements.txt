@@ -2,7 +2,7 @@ Flask==1.1.2
 Flask_Login==0.5.0
 Flask_SQLAlchemy==2.4.4
 psycopg2==2.9.3
-pytest==6.1.0
+pytest==7.1.2
 python-dotenv==0.20.0
 redis==3.5.3
 requests==2.24.0
