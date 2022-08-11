@@ -52,7 +52,7 @@ class Scraper:
 	def get_google_pinyin(self, phrase):
 		url = 'https://translate.google.com/#zh-CN/en/{}'.format(urllib.parse.quote(phrase))
 		self.driver.get(url)
-		CLASSNAME = 'tlid-transliteration-content transliteration-content full'
+		CLASSNAME = 'kO6q6e'
 		elements = self.driver.find_elements_by_xpath('//div[@class="{}"]'.format(CLASSNAME))
 		for element in elements:
 			if not element.text:
